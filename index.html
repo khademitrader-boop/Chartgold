@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script>
+(function(){
+  try{
+    var saved = localStorage.getItem('nb-theme');
+    var theme = (saved === 'dark' || saved === 'light') ? saved : ((window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) ? 'dark' : 'light');
+    document.documentElement.setAttribute('data-theme', theme);
+    document.documentElement.style.colorScheme = theme;
+  }catch(e){}
+})();
+</script>
+<title>نبض بازار | داشبورد لحظه‌ای طلا، ارز و رمزارز</title>
+<meta name="description" content="پایش لحظه‌ای قیمت طلا، ارز و رمزارز، همراه با تقویم شمسی در یک داشبورد یکپارچه.">
+<meta name="theme-color" content="#1E8A55">
+<link rel="manifest" href="manifest.json">
+<meta property="og:title" content="نبض بازار | داشبورد لحظه‌ای طلا، ارز و رمزارز">
+<meta property="og:description" content="پایش لحظه‌ای قیمت طلا، ارز و رمزارز؛ همه در یک صفحه.">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="fa_IR">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Ccircle cx='20' cy='20' r='19' fill='%231E8A55'/%3E%3Cpath d='M10 22 L15 22 L18 14 L22 28 L25 18 L28 22 L30 22' stroke='%23ffffff' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round' fill='none'/%3E%3C/svg%3E">
+
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- ============ Header ============ -->
+<header>
+  <div class="wrap header-inner">
+    <div class="brand">
+      <svg class="brand-mark" viewBox="0 0 40 40" fill="none" aria-hidden="true">
+        <circle cx="20" cy="20" r="18" stroke="url(#markGrad)" stroke-width="1.6"/>
+        <path d="M10 22 L15 22 L18 14 L22 28 L25 18 L28 22 L30 22" stroke="url(#markGrad)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+        <defs>
+          <linearGradient id="markGrad" x1="0" y1="0" x2="40" y2="40" gradientUnits="userSpaceOnUse">
+            <stop offset="0" stop-color="#3FC382"/>
+            <stop offset="1" stop-color="#1E8A55"/>
+          </linearGradient>
+        </defs>
+      </svg>
+      <span class="brand-name">نبض بازار</span>
+    </div>
+    <div class="header-controls">
+      <div class="live-clock" title="ساعت به‌وقت تهران">
+        <span class="live-dot" aria-hidden="true"></span>
+        <span class="clock"><span id="clockHM">--:--</span><span class="clock-sec" id="clockSec">:--</span></span>
+      </div>
+
+      <div class="calendar-wrap">
+        <button class="hdr-icon calendar-btn" id="calendarBtn" type="button" aria-haspopup="true" aria-expanded="false" aria-label="تقویم شمسی" title="تقویم شمسی">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="3"/><path d="M3 9h18M8 2v4M16 2v4"/></svg>
+        </button>
+        <span id="calChipDate" class="sr-only">در حال بارگذاری…</span>
+        <div class="calendar-popover" id="calendarPopover" hidden role="dialog" aria-label="تقویم شمسی">
+          <div class="cal-head">
+            <button class="cal-nav" id="calPrev" type="button" aria-label="ماه قبل">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg>
+            </button>
+            <span class="cal-title" id="calTitle">—</span>
+            <button class="cal-nav" id="calNext" type="button" aria-label="ماه بعد">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
+            </button>
+          </div>
+          <div class="cal-hint">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5z"/></svg>
+            <span>روی هر روز بزنید تا برایش یادداشت بنویسید</span>
+          </div>
+          <div class="cal-weekdays">
+            <span>ش</span><span>ی</span><span>د</span><span>س</span><span>چ</span><span>پ</span><span>ج</span>
+          </div>
+          <div class="cal-days" id="calDays"></div>
+          <div class="cal-foot" id="calFoot">—</div>
+          <a class="cal-notes-link" href="#notes">
+            مشاهده همه یادداشت‌ها
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <button class="hdr-icon refresh-btn" id="refreshBtn" type="button" aria-label="بروزرسانی قیمت‌ها" title="بروزرسانی">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 12a9 9 0 1 1-2.64-6.36"/>
+          <path d="M21 4v6h-6"/>
+        </svg>
+      </button>
+
+      <button class="hdr-icon theme-toggle-btn" id="themeToggleBtn" type="button" data-theme-toggle aria-pressed="false" aria-label="تغییر حالت روشن/تاریک" title="حالت تاریک">
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      </button>
+
+      <div class="mainnav" id="mainNav">
+        <button class="hdr-icon mainnav-toggle" id="mainNavToggle" type="button" aria-haspopup="true" aria-expanded="false" aria-controls="mainNavSheet" aria-label="فهرست مطالب" title="فهرست مطالب">
+          <svg class="icon-open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+          <svg class="icon-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+        </button>
+
+        <div class="mainnav-sheet" id="mainNavSheet" hidden>
+      <a href="#markets" class="mainnav-sheet-link" data-nav="markets">
+        <span class="mainnav-sheet-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg></span>
+        <span class="mainnav-sheet-text">
+          <b>بازارها</b>
+          <small>طلا، ارز و رمزارز لحظه‌ای</small>
+        </span>
+        <svg class="mainnav-sheet-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg>
+      </a>
+      <a href="chart.html" class="mainnav-sheet-link" data-nav="chart">
+        <span class="mainnav-sheet-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 15l4-5 3 3 5-7"/></svg></span>
+        <span class="mainnav-sheet-text">
+          <b>نمودار پیشرفته</b>
+          <small>نمودار تعاملی هر نماد</small>
+        </span>
+        <svg class="mainnav-sheet-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg>
+      </a>
+      <a href="#notes" class="mainnav-sheet-link" data-nav="notes">
+        <span class="mainnav-sheet-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="3"/><path d="M3 9h18M8 2v4M16 2v4M8 14h5"/></svg></span>
+        <span class="mainnav-sheet-text">
+          <b>یادداشت‌ها</b>
+          <small>یادداشت روزانه با تقویم شمسی</small>
+        </span>
+        <svg class="mainnav-sheet-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg>
+      </a>
+      <a href="#why" class="mainnav-sheet-link" data-nav="why">
+        <span class="mainnav-sheet-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.3 6.1L21 12l-6.7 2.9L12 21l-2.3-6.1L3 12l6.7-2.9z"/></svg></span>
+        <span class="mainnav-sheet-text">
+          <b>چرا نبض بازار</b>
+          <small>سرعت، سادگی و ابزارهای کاربردی</small>
+        </span>
+        <svg class="mainnav-sheet-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg>
+      </a>
+      <a href="#about" class="mainnav-sheet-link" data-nav="about">
+        <span class="mainnav-sheet-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 16v-5M12 8h.01"/></svg></span>
+        <span class="mainnav-sheet-text">
+          <b>درباره ما</b>
+          <small>معرفی و راه‌های تماس</small>
+        </span>
+        <svg class="mainnav-sheet-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg>
+      </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ============ Hero ============ -->
+<section class="hero">
+  <svg class="girih-bg" viewBox="0 0 800 400" preserveAspectRatio="xMidYMin slice" aria-hidden="true">
+    <defs>
+      <pattern id="girih" width="90" height="90" patternUnits="userSpaceOnUse" patternTransform="rotate(0)">
+        <g stroke="#2FAE6C" stroke-width="1" fill="none" opacity="0.35">
+          <rect x="20" y="20" width="50" height="50" transform="rotate(45 45 45)"/>
+          <rect x="10" y="10" width="70" height="70" transform="rotate(0 45 45)"/>
+          <circle cx="45" cy="45" r="6"/>
+        </g>
+      </pattern>
+    </defs>
+    <rect width="800" height="400" fill="url(#girih)"/>
+  </svg>
+
+  <div class="wrap hero-inner">
+    <span class="eyebrow">داشبورد بازار مالی ایران</span>
+    <h1>نبض بازار را <span class="accent">لحظه‌به‌لحظه</span> حس کن</h1>
+    <p class="subhead">قیمت آنیِ طلا، ارز و رمزارز؛ همه در یک صفحه، بدون نویز اضافه و بدون تأخیر.</p>
+
+    <div class="pulse-wrap">
+      <svg viewBox="0 0 640 90" aria-hidden="true">
+        <defs>
+          <linearGradient id="pulseGradient" x1="0" y1="0" x2="640" y2="0" gradientUnits="userSpaceOnUse">
+            <stop offset="0" stop-color="#2FAE6C" stop-opacity="0"/>
+            <stop offset="0.15" stop-color="#1E8A55"/>
+            <stop offset="0.5" stop-color="#3FC382"/>
+            <stop offset="0.85" stop-color="#1E8A55"/>
+            <stop offset="1" stop-color="#2FAE6C" stop-opacity="0"/>
+          </linearGradient>
+        </defs>
+        <path class="pulse-path" d="M0,45 L120,45 L145,45 L160,15 L180,75 L200,45 L230,45 L245,30 L260,60 L275,45 L340,45 L360,45 L378,20 L396,70 L414,45 L440,45 L460,45 L480,25 L500,65 L520,45 L640,45"/>
+      </svg>
+    </div>
+
+    <div class="trust-row">
+      <span class="trust-pill">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+        بروزرسانی خودکار
+      </span>
+      <a href="#notes" class="trust-pill trust-pill-link">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="3"/><path d="M3 9h18M8 2v4M16 2v4M8 14h5"/></svg>
+        یادداشت‌های روزانه
+      </a>
+      <span class="trust-pill">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="3"/><path d="M3 9h18M8 2v4M16 2v4"/></svg>
+        همراه با تقویم شمسی
+      </span>
+      <a href="chart.html" class="trust-pill trust-pill-link">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 15l4-5 3 3 5-7"/></svg>
+        نمودار پیشرفته
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ Dollar highlight ============ -->
+<div class="dollar-highlight">
+  <div class="wrap">
+    <div class="usd-live" id="usdLive">
+      <div class="usd-live-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 6v12M15.5 9.5c0-1.4-1.6-2.5-3.5-2.5s-3.5 1-3.5 2.3c0 3.2 7 1.5 7 4.7 0 1.4-1.6 2.5-3.5 2.5s-3.5-1.1-3.5-2.5"/></svg>
+      </div>
+      <div class="usd-live-main">
+        <div class="usd-live-top">
+          <span class="usd-live-label">قیمت لحظه‌ای دلار</span>
+          <span class="usd-live-badge"><span class="usd-live-dot"></span>لحظه‌ای</span>
+        </div>
+        <div class="usd-live-price-row">
+          <span class="usd-live-price" id="usdLivePrice">—</span>
+          <span class="usd-live-unit">تومان</span>
+          <span class="usd-live-change" id="usdLiveChange" data-dir="flat" hidden></span>
+        </div>
+        <div class="usd-live-foot">
+          <span>بروزرسانی خودکار</span>
+          <span class="usd-live-sep">·</span>
+          <span>آخرین بروزرسانی: <span id="usdLiveTime">—</span></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ Markets ============ -->
+<main>
+  <section class="markets" id="markets">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="kicker">بازارها</span>
+        <h2>سه بازار، یک نگاه</h2>
+        <p>نرخ لحظه‌ای طلا، ارز و رمزارز، مستقیم از سرویس داده tgju.org.</p>
+      </div>
+
+      <div class="grid">
+
+        <!-- Currency card -->
+        <article class="card" data-cat="currency">
+          <div class="card-head">
+            <span class="card-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="12" r="5"/><circle cx="16" cy="12" r="5" opacity=".55"/></svg>
+            </span>
+            <span class="card-title">ارز</span>
+          </div>
+          <p class="card-sub">نرخ لحظه‌ای دلار، یورو و ارزهای اصلی بازار</p>
+          <div class="widget-frame" data-widget>
+            <div class="skeleton"><div class="skel-row"></div><div class="skel-row"></div><div class="skel-row"></div><div class="skel-row"></div></div>
+            <div class="widget-error">امکان اتصال به سرویس قیمت وجود ندارد.</div>
+            <tgju
+              type="market-data"
+              items="137203,137205,137206,137207,137225"
+              columns="dot,diff,low,high,time"
+              token="webservice"
+            ></tgju>
+          </div>
+          <div class="card-foot">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+            بروزرسانی زنده
+            <span class="card-updated" data-updated-badge>—</span>
+          </div>
+        </article>
+
+        <!-- Gold card -->
+        <article class="card" data-cat="gold">
+          <div class="card-head">
+            <span class="card-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 4h12l3 6-9 10L3 10z"/><path d="M3 10h18M9 4l3 6-3 10M15 4l-3 6 3 10"/></svg>
+            </span>
+            <span class="card-title">طلا</span>
+          </div>
+          <p class="card-sub">قیمت آنی طلای ۱۸ عیار، ۲۴ عیار و مثقال</p>
+          <div class="widget-frame" data-widget>
+            <div class="skeleton"><div class="skel-row"></div><div class="skel-row"></div><div class="skel-row"></div><div class="skel-row"></div></div>
+            <div class="widget-error">امکان اتصال به سرویس قیمت وجود ندارد.</div>
+            <tgju
+              type="market-data"
+              items="137121,137122,391295,137119"
+              columns="dot,diff,low,high,time"
+              token="webservice"
+            ></tgju>
+          </div>
+          <div class="card-foot">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+            بروزرسانی زنده
+            <span class="card-updated" data-updated-badge>—</span>
+          </div>
+        </article>
+
+        <!-- Crypto card -->
+        <article class="card" data-cat="crypto">
+          <div class="card-head">
+            <span class="card-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l8 4.5v11L12 22l-8-4.5v-11z"/><path d="M12 2v20M4 6.5l8 4.5 8-4.5M4 17.5l8-4.5 8 4.5"/></svg>
+            </span>
+            <span class="card-title">رمزارز</span>
+          </div>
+          <p class="card-sub">بیت‌کوین، اتریوم و بازار دیجیتال</p>
+          <div class="widget-frame" data-widget>
+            <div class="skeleton"><div class="skel-row"></div><div class="skel-row"></div><div class="skel-row"></div><div class="skel-row"></div></div>
+            <div class="widget-error">امکان اتصال به سرویس قیمت وجود ندارد.</div>
+            <tgju
+              type="market-data"
+              items="398097,398096,535605,398115,398102"
+              columns="dot,diff,low,high,time"
+              token="webservice"
+            ></tgju>
+          </div>
+          <div class="card-foot">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+            بروزرسانی زنده
+            <span class="card-updated" data-updated-badge>—</span>
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ Advanced chart CTA ============ -->
+  <section id="advanced-chart-cta">
+    <div class="wrap">
+      <a href="chart.html" class="chart-cta">
+        <div class="chart-cta-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 15l4-5 3 3 5-7"/></svg>
+        </div>
+        <div class="chart-cta-text">
+          <span class="kicker">رمزارز و بازارهای جهانی</span>
+          <h2>نمودار پیشرفته</h2>
+          <p>نمودار زنده و تعاملی هر نمادی که بخواهید؛ ارز دیجیتال، سهام، طلا و فارکس — با جست‌وجوی نماد و ابزار تحلیل تکنیکال کامل.</p>
+        </div>
+        <div class="chart-cta-arrow" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 6l-6 6 6 6"/></svg>
+        </div>
+      </a>
+    </div>
+  </section>
+
+  <!-- ============ Notes ============ -->
+  <section id="notes">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="kicker">یادداشت‌ها</span>
+        <h2>یادداشت‌های روزانه</h2>
+        <p>روی هر روز از تقویم زیر بزنید تا برایش یادداشت بنویسید؛ یادداشت‌های ثبت‌شده همین‌جا و کنار تاریخشان فهرست می‌شوند.</p>
+      </div>
+
+      <div class="notes-layout">
+
+        <div class="notes-calendar-card">
+          <div class="cal-head">
+            <button class="cal-nav" id="notesCalPrev" type="button" aria-label="ماه قبل">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg>
+            </button>
+            <span class="cal-title" id="notesCalTitle">—</span>
+            <button class="cal-nav" id="notesCalNext" type="button" aria-label="ماه بعد">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
+            </button>
+          </div>
+          <div class="cal-weekdays">
+            <span>ش</span><span>ی</span><span>د</span><span>س</span><span>چ</span><span>پ</span><span>ج</span>
+          </div>
+          <div class="cal-days" id="notesCalDays"></div>
+          <div class="notes-calendar-foot">
+            <span class="cal-foot" id="notesCalFoot">—</span>
+            <button class="notes-cal-today" id="notesCalToday" type="button">امروز</button>
+          </div>
+        </div>
+
+        <div class="notes-list-wrap">
+          <div class="notes-list" id="notesList"></div>
+
+          <div class="notes-empty" id="notesEmpty">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="3"/><path d="M3 9h18M8 2v4M16 2v4M8 14h5"/></svg>
+            <p>هنوز یادداشتی ثبت نشده. روی روز موردنظرتان در تقویم کنار این متن بزنید و یادداشت بنویسید.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ Why us ============ -->
+  <section class="alt" id="why">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="kicker">تفاوت</span>
+        <h2>چرا نبض بازار</h2>
+      </div>
+
+      <div class="why-grid">
+        <div class="card why-card">
+          <span class="why-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+          </span>
+          <h3>سرعت</h3>
+          <p>داده‌ها مستقیم و بدون واسطه از سرویس tgju.org دریافت و به‌صورت لحظه‌ای بروزرسانی می‌شوند.</p>
+        </div>
+        <div class="card why-card">
+          <span class="why-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
+          </span>
+          <h3>سادگی</h3>
+          <p>سه بازار مهم در یک صفحه، بدون شلوغی و تبلیغات اضافه؛ فقط همان چیزی که لازم دارید.</p>
+        </div>
+        <div class="card why-card">
+          <span class="why-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="3"/><path d="M3 9h18M8 2v4M16 2v4"/></svg>
+          </span>
+          <h3>ابزارهای کاربردی</h3>
+          <p>تقویم شمسی همراه، برای هماهنگی سریع‌تر با کارهای روزمره‌ی بازار.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ About ============ -->
+  <section id="about">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="kicker">درباره</span>
+        <h2>درباره نبض بازار</h2>
+      </div>
+      <div class="about-inner">
+        <p>نبض بازار یک داشبورد ساده برای پایش لحظه‌ای قیمت طلا، ارز و رمزارز است؛ ساخته شده برای کسانی که می‌خواهند بدون گشتن در چند سایت مختلف، تصویری سریع و شفاف از بازار داشته باشند.</p>
+        <p>تمام قیمت‌ها از طریق سرویس داده tgju.org دریافت می‌شود و این صفحه صرفاً جنبه اطلاع‌رسانی دارد.</p>
+        <div class="contact-pills">
+          <a class="contact-pill" href="mailto:arshamkhademi98@gmail.com">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m4 6 8 7 8-7"/></svg>
+            <span dir="ltr">arshamkhademi98@gmail.com</span>
+          </a>
+          <a class="contact-pill" href="mailto:davachiannarges@gmail.com">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m4 6 8 7 8-7"/></svg>
+            <span dir="ltr">davachiannarges@gmail.com</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<div class="girih-divider" aria-hidden="true"></div>
+
+<!-- ============ Footer ============ -->
+<footer>
+  <div class="wrap footer-inner">
+    <div class="footer-brand"><b>نبض بازار</b> · داده‌ها از طریق tgju.org</div>
+    <div class="footer-links">
+      <a href="#markets">بازارها</a>
+      <a href="chart.html">نمودار پیشرفته</a>
+      <a href="#notes">یادداشت‌ها</a>
+      <a href="#about">درباره ما</a>
+      <a href="mailto:arshamkhademi98@gmail.com">تماس با ما</a>
+      <button class="share-pill" id="sharePill" type="button">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 10.5l6.8-3.9M8.6 13.5l6.8 3.9"/></svg>
+        معرفی به دوستان
+      </button>
+      <button class="footer-calc-toggle" id="calcToggle" type="button" aria-expanded="false" aria-controls="calcPanel">
+        ماشین حساب
+      </button>
+    </div>
+  </div>
+  <div class="wrap" style="margin-top:14px;">
+    <p class="disclaimer">این صفحه صرفاً جنبه اطلاع‌رسانی دارد و توصیه‌ای برای خرید، فروش یا سرمایه‌گذاری محسوب نمی‌شود.</p>
+
+    <!-- ============ Hidden calculator ============ -->
+    <div class="calc-panel" id="calcPanel" hidden>
+      <div class="calc-display" id="calcDisplay">0</div>
+      <div class="calc-grid">
+        <button type="button" class="calc-clear" data-calc="clear">C</button>
+        <button type="button" class="calc-op" data-calc="sign">±</button>
+        <button type="button" class="calc-op" data-calc="percent">%</button>
+        <button type="button" class="calc-op" data-calc="÷">÷</button>
+
+        <button type="button" data-calc="7">7</button>
+        <button type="button" data-calc="8">8</button>
+        <button type="button" data-calc="9">9</button>
+        <button type="button" class="calc-op" data-calc="×">×</button>
+
+        <button type="button" data-calc="4">4</button>
+        <button type="button" data-calc="5">5</button>
+        <button type="button" data-calc="6">6</button>
+        <button type="button" class="calc-op" data-calc="−">−</button>
+
+        <button type="button" data-calc="1">1</button>
+        <button type="button" data-calc="2">2</button>
+        <button type="button" data-calc="3">3</button>
+        <button type="button" class="calc-op" data-calc="+">+</button>
+
+        <button type="button" class="calc-zero" data-calc="0">0</button>
+        <button type="button" data-calc=".">.</button>
+        <button type="button" class="calc-equals" data-calc="=">=</button>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- ============ Back to top ============ -->
+<button class="scroll-top-btn" id="scrollTopBtn" type="button" aria-label="بازگشت به بالا" title="بازگشت به بالا">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+</button>
+
+<!-- ============ Calendar day-note modal ============ -->
+<div class="note-modal-overlay" id="noteModalOverlay" hidden>
+  <div class="note-modal" role="dialog" aria-modal="true" aria-label="یادداشت روز">
+    <div class="note-modal-head">
+      <span class="note-modal-title" id="noteModalTitle">یادداشت روز</span>
+      <button class="note-modal-close" id="noteModalClose" type="button" aria-label="بستن">×</button>
+    </div>
+    <textarea class="note-modal-textarea" id="noteModalTextarea" placeholder="یادداشت خود را برای این روز بنویسید..."></textarea>
+    <div class="note-modal-actions">
+      <button class="note-modal-delete" id="noteModalDelete" type="button">حذف یادداشت</button>
+      <button class="note-modal-save" id="noteModalSave" type="button">ذخیره</button>
+    </div>
+  </div>
+</div>
+
+<!-- TGJU widget engine (loaded once for all widgets) -->
+<script src="https://api.tgju.org/v1/widget/v2" defer></script>
+
+<script src="js/theme.js" defer></script>
+<script src="js/widget-theme-fix.js" defer></script>
+<script src="js/usd-live.js" defer></script>
+<script src="js/header-scroll.js" defer></script>
+<script src="js/nav.js" defer></script>
+<script src="js/dashboard.js" defer></script>
+<script src="js/ui-controls.js" defer></script>
+<script src="js/calculator.js" defer></script>
+<script src="js/notes-store.js" defer></script>
+<script src="js/calendar.js" defer></script>
+<script src="js/notes-list.js" defer></script>
+<script src="js/sw-register.js" defer></script>
+
+</body>
+</html>
