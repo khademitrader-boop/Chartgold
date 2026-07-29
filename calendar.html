@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>تقویم تحصیلی - پزشکی پیام نور البرز</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800&display=swap">
+<link rel="stylesheet" href="assets/style.css">
+<link rel="stylesheet" href="assets/nav.css">
+</head>
+<body data-page="calendar">
+
+<div id="site-header-root"></div>
+
+<div class="page">
+<div class="card">
+    <div class="card-title lg">تقویم تحصیلی</div>
+    <div class="card-subtitle">نیمسال اول ۱۴۰۴-۱۴۰۳ · گروه پزشکی</div>
+
+    <div class="month-item">
+        <div class="month-header" onclick="toggleMonth(this)">
+            <span class="month-title">دی ۱۴۰۳</span>
+            <span class="month-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></span>
+        </div>
+        <div class="month-events">
+            <div class="month-events-inner">
+            <ul class="event-list">
+                <li><span class="event-date">۱۵ دی</span><span class="event-title">تمدید ثبت‌نام کارآموزی بیمارستان البرز</span></li>
+                <li><span class="event-date">۲۰ دی</span><span class="event-title">آخرین مهلت حذف و اضافه</span></li>
+                <li><span class="event-date">۲۵ دی</span><span class="event-title">وبینار آشنایی با پژوهش در پزشکی</span></li>
+            </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="month-item">
+        <div class="month-header" onclick="toggleMonth(this)">
+            <span class="month-title">بهمن ۱۴۰۳</span>
+            <span class="month-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></span>
+        </div>
+        <div class="month-events">
+            <div class="month-events-inner">
+            <ul class="event-list">
+                <li class="important"><span class="event-date">۲۰ بهمن</span><span class="event-title">شروع امتحانات پایان ترم</span></li>
+                <li><span class="event-date">۲۵ بهمن</span><span class="event-title">جلسه پرسش و پاسخ با اساتید</span></li>
+            </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="month-item">
+        <div class="month-header" onclick="toggleMonth(this)">
+            <span class="month-title">اسفند ۱۴۰۳</span>
+            <span class="month-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></span>
+        </div>
+        <div class="month-events">
+            <div class="month-events-inner">
+            <ul class="event-list">
+                <li><span class="event-date">۵ اسفند</span><span class="event-title">پایان امتحانات پایان ترم</span></li>
+                <li class="important"><span class="event-date">۱۰ اسفند</span><span class="event-title">اعلام نتایج نیمسال اول</span></li>
+                <li><span class="event-date">۱۵ اسفند</span><span class="event-title">شروع ثبت‌نام نیمسال دوم</span></li>
+            </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="pill-btn tap" onclick="goTo('index.html')">← بازگشت به صفحه اصلی</div>
+</div>
+</div>
+
+<script src="assets/app.js"></script>
+<script src="assets/nav.js"></script>
+<script>
+    function toggleMonth(headerElement) {
+        const eventsDiv = headerElement.closest('.month-item').querySelector('.month-events');
+        const icon = headerElement.querySelector('.month-icon');
+        eventsDiv.classList.toggle('open');
+        icon.classList.toggle('open');
+    }
+</script>
+
+</body>
+</html>

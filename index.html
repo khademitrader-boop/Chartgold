@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>گروه پزشکی پیام نور البرز</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800&display=swap">
+<link rel="preload" as="image" href="university.jpg" fetchpriority="high">
+<link rel="stylesheet" href="assets/style.css">
+<link rel="stylesheet" href="assets/nav.css">
+</head>
+<body data-page="index">
+
+<div id="site-header-root"></div>
+
+<div id="mainPage">
+    <div class="hero">
+        <img src="university.jpg" alt="دانشگاه" class="hero-image" width="384" height="512">
+        <div class="hero-overlay">
+            <span class="kicker">دانشگاه پیام نور · استان البرز</span>
+            <h1>گروه پزشکی واحد کرج</h1>
+            <div class="hero-line"></div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div id="newsList"></div>
+        <footer>ویژه دانشجویان پزشکی</footer>
+    </div>
+</div>
+
+<div id="fullNewsPage" class="full-news-page">
+    <button class="back-btn" onclick="closeFullNews()">← بازگشت</button>
+    <div class="full-news-card">
+        <h1 class="full-news-title" id="fullTitle"></h1>
+        <span class="full-news-date" id="fullDate"></span>
+        <div class="full-news-text" id="fullText"></div>
+    </div>
+</div>
+
+<script src="assets/app.js"></script>
+<script src="assets/nav.js"></script>
+<script>
+    const newsDatabase = [
+        {
+            id: 1,
+            title: "تمدید ثبت‌نام کارآموزی بیمارستان البرز",
+            summary: "مهلت ثبت‌نام کارآموزی دانشجویان پزشکی تا ۳۰ دی تمدید شد.",
+            fullText: "به اطلاع دانشجویان پزشکی می‌رساند، با هماهنگی بیمارستان البرز، مهلت ثبت‌نام کارآموزی تا ۳۰ دی تمدید گردید. دانشجویان می‌توانند با مراجعه به واحد آموزش ثبت‌نام کنند.",
+            date: "۱۴۰۳/۱۰/۱۵"
+        },
+        {
+            id: 2,
+            title: "برنامه امتحانات پایان ترم اعلام شد",
+            summary: "جدول زمان‌بندی امتحانات پایان ترم دانشجویان پزشکی منتشر شد.",
+            fullText: "برنامه امتحانات پایان ترم نیمسال اول از ۲۰ بهمن ماه آغاز می‌شود. دانشجویان برای مشاهده جدول دقیق به سامانه گلستان مراجعه کنند.",
+            date: "۱۴۰۳/۱۰/۱۲"
+        },
+        {
+            id: 3,
+            title: "وبینار آشنایی با پژوهش در پزشکی",
+            summary: "وبینار رایگان با حضور اساتید برتر کشوری برگزار می‌شود.",
+            fullText: "وبینار مقدمات پژوهش در پزشکی چهارشنبه این هفته ساعت ۱۸ برگزار می‌شود. حضور برای تمام دانشجویان رایگان است.",
+            date: "۱۴۰۳/۱۰/۱۰"
+        }
+    ];
+
+    function showNewsList() {
+        const container = document.getElementById('newsList');
+        container.innerHTML = newsDatabase.map(item => `
+            <div class="news-card" onclick="showFullNews(${item.id})">
+                <div class="news-title">${item.title}</div>
+                <div class="news-summary">${item.summary}</div>
+                <div class="news-meta">
+                    <span class="news-date">${item.date}</span>
+                    <button class="read-more" onclick="event.stopPropagation(); showFullNews(${item.id})">مطالعه</button>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    function showFullNews(id) {
+        const news = newsDatabase.find(n => n.id === id);
+        if (!news) return;
+        document.getElementById('fullTitle').innerText = news.title;
+        document.getElementById('fullDate').innerText = news.date;
+        document.getElementById('fullText').innerText = news.fullText;
+
+        const fullPage = document.getElementById('fullNewsPage');
+        document.getElementById('mainPage').style.display = 'none';
+        fullPage.classList.add('show');
+        window.scrollTo(0, 0);
+        history.pushState({ page: 'fullNews' }, '', '#news');
+    }
+
+    function closeFullNews() {
+        document.getElementById('fullNewsPage').classList.remove('show');
+        document.getElementById('mainPage').style.display = 'block';
+        history.replaceState({ page: 'main' }, '', window.location.pathname);
+    }
+
+    window.addEventListener('popstate', () => {
+        if (document.getElementById('fullNewsPage').classList.contains('show')) {
+            closeFullNews();
+        }
+    });
+
+    showNewsList();
+</script>
+</body>
+</html>

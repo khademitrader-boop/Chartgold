@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>سامانه دانشجویی - گلستان</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800&display=swap">
+<link rel="stylesheet" href="assets/style.css">
+<link rel="stylesheet" href="assets/nav.css">
+</head>
+<body data-page="profile">
+
+<div id="site-header-root"></div>
+
+<div class="page">
+
+<div class="card" id="loginCard">
+    <div class="card-title">سامانه گلستان</div>
+    <div class="card-subtitle">دانشگاه پیام نور استان البرز</div>
+
+    <div class="input-group">
+        <label>کد ملی</label>
+        <div class="input-wrap">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="12" r="2"/><path d="M14 10h4M14 14h4"/></svg>
+            <input type="text" id="nationalCode" placeholder="کد ملی خود را وارد کنید">
+        </div>
+    </div>
+    <div class="input-group">
+        <label>شماره دانشجویی</label>
+        <div class="input-wrap">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg>
+            <input type="text" id="studentId" placeholder="شماره دانشجویی خود را وارد کنید">
+        </div>
+    </div>
+    <div class="captcha">
+        <input type="checkbox" id="captcha">
+        <label for="captcha">من ربات نیستم</label>
+    </div>
+    <button class="login-btn tap" onclick="checkLogin()">ورود به سامانه</button>
+    <div class="error-msg" id="errorMsg">کد ملی یا شماره دانشجویی اشتباه است</div>
+    <div class="pill-btn tap" onclick="goTo('index.html')">← بازگشت به صفحه اصلی</div>
+</div>
+
+<div class="card profile-section" id="profileCard">
+    <div class="profile-image-container">
+        <div class="profile-img"><div class="profile-img-inner"><img src="majtabi.jpg" alt="عکس دانشجو" width="92" height="92"></div></div>
+    </div>
+
+    <div class="profile-header">
+        <div class="student-name">مجتبی خادمی</div>
+        <div class="student-major">پزشکی ژنتیک · کارشناسی · مرحله کارآموزی</div>
+    </div>
+
+    <div class="info-grid">
+        <div class="info-item"><div class="info-label">نام پدر</div><div class="info-value">ابوالفضل</div></div>
+        <div class="info-item"><div class="info-label">شماره دانشجویی</div><div class="info-value">۴۰۲۰۹۴۲۹۲</div></div>
+        <div class="info-item"><div class="info-label">کد ملی</div><div class="info-value">۰۲۰۰۳۴۲۴۸۷</div></div>
+        <div class="info-item"><div class="info-label">رشته</div><div class="info-value">پزشکی ژنتیک</div></div>
+        <div class="info-item"><div class="info-label">مقطع</div><div class="info-value">کارشناسی · کارآموزی</div></div>
+        <div class="info-item"><div class="info-label">دانشکده</div><div class="info-value">علوم پایه</div></div>
+        <div class="info-item"><div class="info-label">واحدهای این ترم</div><div class="info-value">۳۲ واحد</div></div>
+        <div class="info-item"><div class="info-label">معدل کل</div><div class="info-value">۲۰</div></div>
+        <div class="info-item"><div class="info-label">نیمسال تحصیلی</div><div class="info-value">دوم ۱۴۰۵-۱۴۰۴</div></div>
+    </div>
+
+    <div class="exam-type"><span>نوع برگزاری آزمون: حضوری</span></div>
+
+    <div class="menu-list">
+        <div class="menu-item tap" onclick="goTo('exam-schedule.html')">
+            <span class="menu-label">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M9 8h6M9 12h6M9 16h4"/></svg>
+                برنامه امتحانی
+            </span>
+            <span class="menu-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6" transform="rotate(180 12 12)"/></svg></span>
+        </div>
+        <div class="menu-item tap" onclick="goTo('current-grades.html')">
+            <span class="menu-label">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20V10M12 20V4M20 20v-7"/></svg>
+                کارنامه ترم جاری
+            </span>
+            <span class="menu-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6" transform="rotate(180 12 12)"/></svg></span>
+        </div>
+    </div>
+
+    <div class="tuition-box">
+        <div class="tuition-row"><span class="tuition-label">شهریه ثابت ترمی</span><span class="tuition-value">۴۲,۰۰۰,۰۰۰ ریال</span></div>
+        <div class="tuition-row"><span class="tuition-label">شهریه متغیر</span><span class="tuition-value">۴۶,۸۰۰,۰۰۰ ریال</span></div>
+        <div class="tuition-paid">✓ شهریه به صورت کامل پرداخت شده است</div>
+    </div>
+
+    <div class="pill-btn tap" onclick="logout()">خروج از حساب کاربری</div>
+</div>
+
+</div>
+
+<script src="assets/app.js"></script>
+<script src="assets/nav.js"></script>
+<script>
+    function checkLogin() {
+        const national = document.getElementById('nationalCode').value;
+        const student = document.getElementById('studentId').value;
+        const captcha = document.getElementById('captcha').checked;
+
+        if (national === '0200342487' && student === '402094292' && captcha) {
+            sessionStorage.setItem('loggedIn', 'true');
+            showProfile();
+        } else {
+            const err = document.getElementById('errorMsg');
+            err.style.display = 'block';
+            setTimeout(() => { err.style.display = 'none'; }, 2500);
+        }
+    }
+
+    function showProfile() {
+        document.getElementById('loginCard').style.display = 'none';
+        document.getElementById('profileCard').style.display = 'block';
+    }
+
+    function logout() {
+        sessionStorage.removeItem('loggedIn');
+        document.getElementById('profileCard').style.display = 'none';
+        document.getElementById('loginCard').style.display = 'block';
+        document.getElementById('nationalCode').value = '';
+        document.getElementById('studentId').value = '';
+        document.getElementById('captcha').checked = false;
+    }
+
+    if (sessionStorage.getItem('loggedIn') === 'true') {
+        showProfile();
+    }
+</script>
+</body>
+</html>
